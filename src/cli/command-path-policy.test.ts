@@ -155,6 +155,19 @@ describe("command-path-policy", () => {
     });
   });
 
+  it("bypasses config guard startup for interactive commands", () => {
+    for (const commandPath of [["chat"], ["terminal"], ["tui"]]) {
+      expect(resolveCliCommandPathPolicy(commandPath)).toEqual({
+        bypassConfigGuard: true,
+        routeConfigGuard: "never",
+        loadPlugins: "never",
+        hideBanner: false,
+        ensureCliPath: true,
+        networkProxy: "bypass",
+      });
+    }
+  });
+
   it("defaults unknown command paths to network proxy routing", () => {
     expect(resolveCliNetworkProxyPolicy(["node", "openclaw", "googlemeet", "login"])).toBe(
       "default",
